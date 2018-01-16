@@ -1,0 +1,92 @@
+开发完成视图后
+编写单元测试
+自己测试
+编写接口文档
+
+1. 短信服务
+
+云通讯  www.yuntongxun.com
+
+2. 图片存储（文件）
+
+图片存储量，空间已满
+图片存储的机器宕机 ，图片有可能丢失或损坏，没有备份
+
+用户A  a.jpg
+用户B  b.jpg
+不同名的同一份资源会被保存多次，造成资源浪费
+
+用户A  a.jpg
+用户B  a.jpg
+同名的不同资源，后保存的会覆盖掉之前保存的同名资源
+
+
+方式1：  自己搭建文件存储系统   开源软件  FastDFS HDF
+方式2：  租用第三方的文件存储系统  七牛云
+
+www.qiniu.com
+pip install qiniu
+
+
+ 3. 登录错误 超过次数 封ip
+
+ 选用redis记录用户登录的错误次数，
+
+ 每错误一次，redis中的数据加1，
+ 达到最大限制次数的时，不再进行用户名密码判断
+
+ 每个用户单独维护一条记录，维护数据有效期
+ "access_%s" % user_ip :   string(次数）
+
+
+ 4. redis的指令
+ http://redisdoc.com/index.html
+ http://redis-py.readthedocs.io/en/latest/#indices-and-tables
+
+
+ 5.  csrf
+ post  put  delete
+
+6. 前端模板
+art-template   http://aui.github.io/art-template/zh-cn/docs/index.html
+
+
+7. celery
+
+pip install celery
+
+
+8. 数据库优化：
+
+a. 表结构设计
+    三范式  https://www.zhihu.com/question/24696366
+    设计的时候就考虑可能会用到的查询，为方便查询而设计，比如用空间换时间，适当增加冗余字段节省查询开销
+b. 建索引
+    http://www.jianshu.com/p/2b541c028157
+    提升 查询速度  复合索引  where k1     k2   k3  k4
+    降低   增删改
+c. sql语句优化
+    使用索引 注意关键字顺序 最左原则
+    不要select *
+    能使用联合查询，不使用嵌套（子查询）
+
+    select  from tbl_a a inner join tbl_b b on a.field=b.filed where b.=
+
+    select from tbl_a where filed=(select field from tbl_b where b.=)
+
+    能不使用联合查询，尽量不用联合查询
+
+    外键 cascade 级联 （维护外键有额外开销，影响性能）
+
+    使用分析工具分析效率低的sql语句   慢查询工具
+    https://flyerboy.github.io/2016/12/23/mysql_slow/
+    https://yemengying.com/2016/05/24/mysql-tuning/
+
+d. 缓存
+    redis memcached
+
+e. 读写分离
+    主从热备份       主（写   增删改）  从（查）
+
+f. 分库分表  水平分库分表
+    http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-split-table
