@@ -4,4 +4,4 @@ from ihome import db
 
 api=Blueprint("api_1_0",__name__)
 
-from . import index
+from . import index,verify_code
