@@ -44,12 +44,12 @@ function sendSMSCode() {
         $(".phonecode-a").attr("onclick", "sendSMSCode();");
         return;
     }
-    $.get("/api/smscode", {mobile:mobile, code:imageCode, codeId:imageCodeId}, 
+    $.get("/api/v1_0/sms_codes/"+mobile,{image_code:imageCode, image_code_id:imageCodeId},
         function(data){
             if (0 != data.errno) {
                 $("#image-code-err span").html(data.errmsg); 
                 $("#image-code-err").show();
-                if (2 == data.errno || 3 == data.errno) {
+                if (4002 == data.errno || 4004 == data.errno) {
                     generateImageCode();
                 }
                 $(".phonecode-a").attr("onclick", "sendSMSCode();");
