@@ -35,7 +35,7 @@ def get_image_code(image_code_id):
         resp = {
             "errno": RET.DBERR,
             # "errmsg": "save image code failed"
-            "errmsg": "保存验证码失败h"
+            "errmsg": "保存验证码失败"
         }
         return jsonify(resp)
 
