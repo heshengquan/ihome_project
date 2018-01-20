@@ -2,6 +2,8 @@
 
 from datetime import datetime
 # from ihome import constants
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from . import db
 
 
@@ -26,6 +28,21 @@ class User(BaseModel, db.Model):
     avatar_url = db.Column(db.String(128))  # 用户头像路径
     houses = db.relationship("House", backref="user")  # 用户发布的房屋
     orders = db.relationship("Order", backref="user")  # 用户下的订单
+
+    #get 获取属性
+    @property
+    def password(self):
+        """对应password属性的读取操作"""
+        raise AttributeError("不支持读取操作")
+
+    @password.setter
+    def password(self, value):
+        # """对应password属性的设置操作, value用户设置的密码值"""
+        self.password_hash = generate_password_hash(value)
+    #123
+    def check_password(self, value):
+        """检查用户密码， value 是用户填写密码"""
+        return check_password_hash(self.password_hash, value)
 
 
 class Area(BaseModel, db.Model):

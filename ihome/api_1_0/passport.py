@@ -91,12 +91,40 @@ def register():
 
     # 保存用户的数据到数据库中
 
+    user = User(name=mobile, mobile=mobile)
+    # 对于password属性的设置,会调用model里的属性方法,进行加密操作
+    user.password = password #"234"
 
 
+    try:
+        db.session.add(user)
+        db.session.commit()
+
+    except Exception as ret:
+        current_app.logger.error(ret)
+        db.session.rollback()
+        # 表示已经注册过
+        resp = {
+            "errno": RET.DATAEXIST,
+            "errmsg": "用户手机号已经注册"
+        }
+        return jsonify(resp)
+
+    # 利用session记录用户的登陆状态
+    session["user_id"] = user.id
+    session["user_name"] = mobile
+    session["mobile"] = mobile
+
+    # 返回值
+    resp = {
+        "errno": RET.OK,
+        "errmsg": "注册成功"
+    }
+    return jsonify(resp)
 
 
+def login():
 
-
-
-
-
+    user = User()
+    pswd = request.get_json()
+    user.check_password(pswd)

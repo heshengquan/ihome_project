@@ -11,3 +11,12 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
+$(document).ready(function () {
+    $("#form-avatar").submit(function (event) {
+        //阻止表单的默认行为
+        event.preventDefault();
+
+        $(this).ajaxSubmit({})
+
+    })
+})
