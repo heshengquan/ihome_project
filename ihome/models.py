@@ -4,6 +4,7 @@ from datetime import datetime
 # from ihome import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from ihome import constants
 from . import db
 
 
@@ -44,6 +45,25 @@ class User(BaseModel, db.Model):
         """检查用户密码， value 是用户填写密码"""
         return check_password_hash(self.password_hash, value)
 
+    def to_dict(self):
+        """将对象转换为字典数据"""
+        user_dict = {
+            "user_id": self.id,
+            "name": self.name,
+            "mobile": self.mobile,
+            "avatar": constants.QINIU_URL_DOMAIN + self.avatar_url if self.avatar_url else "",
+            "create_time": self.create_time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        return user_dict
+
+    def auth_to_dict(self):
+        """将实名信息转换为字典数据"""
+        auth_dict = {
+            "user_id": self.id,
+            "real_name": self.real_name,
+            "id_card": self.id_card
+        }
+        return auth_dict
 
 class Area(BaseModel, db.Model):
     """城区"""
@@ -54,6 +74,12 @@ class Area(BaseModel, db.Model):
     name = db.Column(db.String(32), nullable=False)  # 区域名字
     houses = db.relationship("House", backref="area")  # 区域的房屋
 
+    def to_dict(self):
+        area={
+            "aid":self.id,
+            "aname":self.name
+        }
+        return area
 
 # 房屋设施表，建立房屋与设施的多对多关系
 house_facility = db.Table(

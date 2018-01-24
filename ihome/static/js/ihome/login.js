@@ -24,5 +24,28 @@ $(document).ready(function() {
             $("#password-err").show();
             return;
         }
+        var data={"mobile":mobile,"password":passwd};
+        var data_json=JSON.stringify(data);
+        $.ajax({
+            url:"/api/v1_0/sessions",
+            type:"post",
+            data: data_json,
+            contentType: "application/json",
+            dataType: "json",
+            headers:{
+                "X-CSRFToken":getCookie("csrf_token"),
+            },
+            success:function (data) {
+                if(data.errno==0){
+                    location.href="/"
+                }else {
+                    // 其他错误信息，在页面中展示
+                    $("#password-err span").html(data.errmsg);
+                    $("#password-err").show();
+                    return;
+                }
+            }
+
+        })
     });
 })
