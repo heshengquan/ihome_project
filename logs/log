@@ -2530,3 +2530,32 @@ INFO _internal.py:87 127.0.0.1 - - [28/Jan/2018 17:20:37] "GET /static/plugins/s
 INFO _internal.py:87 127.0.0.1 - - [28/Jan/2018 17:20:43] "GET /api/v1_0/user HTTP/1.1" 200 -
 INFO _internal.py:87 127.0.0.1 - - [28/Jan/2018 17:20:51] "GET /api/v1_0/user/orders?role=landlord HTTP/1.1" 200 -
 INFO _internal.py:87 127.0.0.1 - - [28/Jan/2018 17:20:54] "GET /api/v1_0/user/orders?role=custom HTTP/1.1" 200 -
+INFO _internal.py:87  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 266-822-868
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:15] "GET /api/v1_0/session HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:16] "GET /api/v1_0/houses/index HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:21] "GET /api/v1_0/user HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:21] "GET /api/v1_0/areas HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:23] "GET /api/v1_0/user/orders?role=custom HTTP/1.1" 200 -
+INFO csrf.py:251 The CSRF token is missing.
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:00:25] "POST /api/v1_0/orders/3/payment HTTP/1.1" 400 -
+INFO csrf.py:251 The CSRF token is missing.
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:04:10] "POST /api/v1_0/orders/3/payment HTTP/1.1" 400 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:04:57] "GET /orders.html HTTP/1.1" 304 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:04:57] "GET /api/v1_0/user/orders?role=custom HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:04:59] "POST /api/v1_0/orders/3/payment HTTP/1.1" 500 -
+INFO _internal.py:87  * Detected change in '/home/python/Desktop/ihome_project/config.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 266-822-868
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:06:16] "GET /orders.html HTTP/1.1" 304 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:06:16] "GET /api/v1_0/user/orders?role=custom HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:06:18] "POST /api/v1_0/orders/3/payment HTTP/1.1" 200 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:06:43] "GET /orders.html HTTP/1.1" 304 -
+INFO _internal.py:87 192.168.211.1 - - [28/Jan/2018 20:06:43] "GET /api/v1_0/user/orders?role=custom HTTP/1.1" 200 -
+INFO _internal.py:87  * Detected change in '/home/python/Desktop/ihome_project/ihome/models.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 266-822-868
