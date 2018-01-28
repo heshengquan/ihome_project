@@ -1,11 +1,9 @@
 # -*- coding:utf-8 -*-
 
 from datetime import datetime
-# from ihome import constants
-from werkzeug.security import generate_password_hash, check_password_hash
-
-from ihome import constants
 from . import db
+from werkzeug.security import generate_password_hash, check_password_hash
+from ihome import constants
 
 
 class BaseModel(object):
@@ -30,7 +28,6 @@ class User(BaseModel, db.Model):
     houses = db.relationship("House", backref="user")  # 用户发布的房屋
     orders = db.relationship("Order", backref="user")  # 用户下的订单
 
-    #get 获取属性
     @property
     def password(self):
         """对应password属性的读取操作"""
@@ -38,9 +35,9 @@ class User(BaseModel, db.Model):
 
     @password.setter
     def password(self, value):
-        # """对应password属性的设置操作, value用户设置的密码值"""
+        """对应password属性的设置操作, value用户设置的密码值"""
         self.password_hash = generate_password_hash(value)
-    #123
+
     def check_password(self, value):
         """检查用户密码， value 是用户填写密码"""
         return check_password_hash(self.password_hash, value)
@@ -65,6 +62,7 @@ class User(BaseModel, db.Model):
         }
         return auth_dict
 
+
 class Area(BaseModel, db.Model):
     """城区"""
 
@@ -75,11 +73,13 @@ class Area(BaseModel, db.Model):
     houses = db.relationship("House", backref="area")  # 区域的房屋
 
     def to_dict(self):
-        area={
-            "aid":self.id,
-            "aname":self.name
+        """自定义的方法，将对象转换为字典"""
+        area_dict = {
+            "aid": self.id,
+            "aname": self.name
         }
-        return area
+        return area_dict
+
 
 # 房屋设施表，建立房屋与设施的多对多关系
 house_facility = db.Table(
@@ -164,7 +164,7 @@ class House(BaseModel, db.Model):
 
         # 评论信息
         comments = []
-        orders = Order.query.filter(Order.house_id == self.id, Order.status == "COMPLETE", Order.comment != None) \
+        orders = Order.query.filter(Order.house_id == self.id, Order.status == "COMPLETE", Order.comment != None)\
             .order_by(Order.update_time.desc()).limit(constants.HOUSE_DETAIL_COMMENT_DISPLAY_COUNTS)
         for order in orders:
             comment = {
@@ -221,3 +221,20 @@ class Order(BaseModel, db.Model):
         ),
         default="WAIT_ACCEPT", index=True)
     comment = db.Column(db.Text)  # 订单的评论信息或者拒单原因
+    # trade_no = db.Column(db.String(128))  # 支付宝的交易编号
+
+    def to_dict(self):
+        """将订单信息转换为字典数据"""
+        order_dict = {
+            "order_id": self.id,
+            "title": self.house.title,
+            "img_url": constants.QINIU_URL_DOMAIN + self.house.index_image_url if self.house.index_image_url else "",
+            "start_date": self.begin_date.strftime("%Y-%m-%d"),
+            "end_date": self.end_date.strftime("%Y-%m-%d"),
+            "ctime": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "days": self.days,
+            "amount": self.amount,
+            "status": self.status,
+            "comment": self.comment if self.comment else ""
+        }
+        return order_dict

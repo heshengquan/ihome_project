@@ -17,8 +17,66 @@ function getCookie(name) {
 $(document).ready(function(){
     $('.modal').on('show.bs.modal', centerModals);      //当模态框出现的时候
     $(window).on('resize', centerModals);
-    $(".order-comment").on("click", function(){
-        var orderId = $(this).parents("li").attr("order-id");
-        $(".modal-comment").attr("order-id", orderId);
+    // 查询房客订单
+    $.get("/api/v1_0/user/orders?role=custom", function(resp){
+        if (resp.errno == 0) {
+            $(".orders-list").html(template("orders-list-tmpl", {orders:resp.data.orders}));
+
+            // 发起支付请求
+            $(".order-pay").on("click", function () {
+                var orderId = $(this).parents("li").attr("order-id");
+                $.ajax({
+                    url: "/api/v1_0/orders/" + orderId + "/payment",
+                    type: "post",
+                    dataType: "json",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrf_token"),
+                    },
+                    success: function (resp) {
+                        if (resp.errno == 4101) {
+                            location.href = "/login.html";
+                        } else if (resp.errno == 0) {
+                            // 从后端拿到了支付宝的链接，让用户跳转到支付宝的页面
+                            location.href = resp.data.alipay_url;
+                        }
+                    }
+                });
+            });
+            $(".order-comment").on("click", function(){
+                var orderId = $(this).parents("li").attr("order-id");
+                $(".modal-comment").attr("order-id", orderId);
+            });
+            $(".modal-comment").on("click", function(){
+                var orderId = $(this).attr("order-id");
+                var comment = $("#comment").val()
+                if (!comment) return;
+                var data = {
+                    order_id:orderId,
+                    comment:comment
+                };
+                // 处理评论
+                $.ajax({
+                    url:"/api/v1_0/orders/"+orderId+"/comment",
+                    type:"PUT",
+                    data:JSON.stringify(data),
+                    contentType:"application/json",
+                    dataType:"json",
+                    headers:{
+                        "X-CSRFTOKEN":getCookie("csrf_token"),
+                    },
+                    success:function (resp) {
+                        if (resp.errno == 4101) {
+                            location.href = "/login.html";
+                        } else if (resp.errno == 0) {
+                            $(".orders-list>li[order-id="+ orderId +"]>div.order-content>div.order-text>ul li:eq(4)>span").html("已完成");
+                            $("ul.orders-list>li[order-id="+ orderId +"]>div.order-title>div.order-operate").hide();
+                            $("#comment-modal").modal("hide");
+                        }
+                    }
+                });
+            });
+        }
     });
+
+
 });
